@@ -10764,6 +10764,29 @@ a.anchor-link {
   }
 </style>
 <!-- End of mermaid configuration --></head>
+<style>
+/* Nền & chữ chung */
+body, .container, .jp-Notebook, .jp-Cell, .jp-RenderedHTMLCommon {
+  background:#fff !important; color:#000 !important;
+}
+
+/* Ô nhập code + ô output */
+.input_area, .jp-InputArea, .output_area, .jp-OutputArea,
+.highlight, pre, code {
+  background:#f7f7f7 !important; color:#000 !important;
+  border:1px solid #ddd !important;
+}
+
+/* CodeMirror (trình tô màu cú pháp) */
+.CodeMirror, .cm-s-ipython, .cm-s-jupyter {
+  background:#f7f7f7 !important; color:#000 !important;
+}
+.CodeMirror pre, .CodeMirror span { color:inherit !important; }
+
+/* Prompt bên trái (In [1], Out [1]) */
+.prompt, .jp-InputPrompt, .jp-OutputPrompt { color:#444 !important; }
+</style>
+
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9d3700c7-00aa-4206-805f-a2b5c35bc176">
