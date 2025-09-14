@@ -1,0 +1,24 @@
+
+- Covert dark => white
+<style>
+/* Nền & chữ chung */
+body, .container, .jp-Notebook, .jp-Cell, .jp-RenderedHTMLCommon {
+  background:#fff !important; color:#000 !important;
+}
+
+/* Ô nhập code + ô output */
+.input_area, .jp-InputArea, .output_area, .jp-OutputArea,
+.highlight, pre, code {
+  background:#f7f7f7 !important; color:#000 !important;
+  border:1px solid #ddd !important;
+}
+
+/* CodeMirror (trình tô màu cú pháp) */
+.CodeMirror, .cm-s-ipython, .cm-s-jupyter {
+  background:#f7f7f7 !important; color:#000 !important;
+}
+.CodeMirror pre, .CodeMirror span { color:inherit !important; }
+
+/* Prompt bên trái (In [1], Out [1]) */
+.prompt, .jp-InputPrompt, .jp-OutputPrompt { color:#444 !important; }
+</style>
