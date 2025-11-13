@@ -140,8 +140,8 @@ def tab1():
     
     if not chartdata.empty:
         fig = px.area(chartdata, x=chartdata.index, y='Close', 
-                     labels={'Close': 'Giá đóng cửa (VNĐ)', 'Date': 'Ngày'},
-                     title=f'Biểu đồ giá {ticker.replace(".VN", "")}')
+                    labels={'Close': 'Giá đóng cửa (VNĐ)', 'Date': 'Ngày'},
+                    title=f'Biểu đồ giá {ticker.replace(".VN", "")}')
         
         fig.update_xaxes(
             rangeselector=dict(
@@ -189,7 +189,7 @@ def tab2():
     
     with c3:
         duration = st.selectbox("Khoảng thời gian", 
-                               ['-', '1 Tháng', '3 Tháng', '6 Tháng', 'YTD', '1 Năm', '3 Năm', '5 Năm', 'Tất cả'])
+                            ['-', '1 Tháng', '3 Tháng', '6 Tháng', 'YTD', '1 Năm', '3 Năm', '5 Năm', 'Tất cả'])
         
         # Map tên tiếng Việt sang format Yahoo Finance
         duration_map = {
@@ -257,7 +257,7 @@ def tab2():
         if plot == 'Đường':
             fig.add_trace(
                 go.Scatter(x=chartdata['Date'], y=chartdata['Close'], 
-                          mode='lines', name='Giá đóng cửa', line=dict(color='blue')),
+                        mode='lines', name='Giá đóng cửa', line=dict(color='blue')),
                 secondary_y=False
             )
         else:
@@ -277,14 +277,14 @@ def tab2():
         if 'SMA' in chartdata.columns:
             fig.add_trace(
                 go.Scatter(x=chartdata['Date'], y=chartdata['SMA'], 
-                          mode='lines', name='SMA 50 ngày', line=dict(color='orange')),
+                        mode='lines', name='SMA 50 ngày', line=dict(color='orange')),
                 secondary_y=False
             )
         
         # Vẽ khối lượng giao dịch
         fig.add_trace(
             go.Bar(x=chartdata['Date'], y=chartdata['Volume'], 
-                  name='Khối lượng', marker=dict(color='lightblue')),
+                name='Khối lượng', marker=dict(color='lightblue')),
             secondary_y=True
         )
         
@@ -427,7 +427,7 @@ def tab4():
                 fig, ax = plt.subplots(figsize=(15, 8))
                 ax.plot(mc, alpha=0.3)
                 plt.title(f'Mô phỏng Monte Carlo cho {ticker.replace(".VN", "")} - {time_horizon} ngày tiếp theo', 
-                         fontsize=16, fontweight='bold')
+                        fontsize=16, fontweight='bold')
                 plt.xlabel('Ngày', fontsize=12)
                 plt.ylabel('Giá (VNĐ)', fontsize=12)
                 plt.axhline(y=current_price, color='red', linestyle='--', linewidth=2)
@@ -462,7 +462,7 @@ def tab4():
                     st.metric("Giá dự đoán (5% thấp nhất)", f"{percentile_5:,.0f} VNĐ")
                 with col3:
                     st.metric("VaR (95% tin cậy)", f"{VaR:,.0f} VNĐ", 
-                             delta=f"{(VaR/current_price*100):.2f}%", delta_color="inverse")
+                            delta=f"{(VaR/current_price*100):.2f}%", delta_color="inverse")
                 
                 st.info(f"**Giải thích**: Với độ tin cậy 95%, rủi ro tối đa trong {time_horizon} ngày tới là {VaR:,.0f} VNĐ ({(VaR/current_price*100):.2f}% giá hiện tại)")
             else:
@@ -491,8 +491,8 @@ def tab5():
     
     # Tùy chọn khoảng thời gian
     period = st.selectbox("Khoảng thời gian", 
-                         ['1 Tháng', '3 Tháng', '6 Tháng', '1 Năm', '3 Năm', '5 Năm'],
-                         index=3)
+                        ['1 Tháng', '3 Tháng', '6 Tháng', '1 Năm', '3 Năm', '5 Năm'],
+                        index=3)
     
     period_map = {
         '1 Tháng': '1mo',
@@ -688,7 +688,7 @@ def run():
     select_tab = st.sidebar.radio(
         "Chọn chức năng",
         ['Tổng Quan', 'Biểu Đồ Kỹ Thuật', 'Thông Tin Tài Chính', 
-         'Mô Phỏng Monte Carlo', 'So Sánh Danh Mục', 'Giới Thiệu VN30']
+        'Mô Phỏng Monte Carlo', 'So Sánh Danh Mục', 'Giới Thiệu VN30']
     )
     
     st.sidebar.markdown("---")
