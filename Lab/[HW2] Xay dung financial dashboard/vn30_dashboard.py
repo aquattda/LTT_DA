@@ -122,7 +122,7 @@ def tab1():
             st.dataframe(summary.iloc[5:], use_container_width=True, hide_index=True)
     
     # Vẽ biểu đồ giá lịch sử
-    st.subheader("📈 Biểu Đồ Giá Lịch Sử")
+    st.subheader("Biểu Đồ Giá Lịch Sử")
     
     @st.cache_data
     def getstockdata(ticker):
@@ -176,7 +176,7 @@ def tab2():
     
     st.subheader(f"{ticker.replace('.VN', '')} - {TICKER_NAMES.get(ticker, ticker)}")
     
-    st.info("💡 Đặt khoảng thời gian thành '-' để chọn khoảng ngày cụ thể")
+    st.info("Đặt khoảng thời gian thành '-' để chọn khoảng ngày cụ thể")
     
     # Tùy chọn
     c1, c2, c3, c4, c5 = st.columns(5)
@@ -310,10 +310,10 @@ def tab2():
 #==============================================================================
 
 def tab3():
-    st.title("💰 Thông Tin Tài Chính")
+    st.title("Thông Tin Tài Chính")
     
     if ticker == '-':
-        st.info("👈 Vui lòng chọn một mã cổ phiếu từ menu bên trái")
+        st.info("Vui lòng chọn một mã cổ phiếu từ menu bên trái")
         return
     
     st.subheader(f"{ticker.replace('.VN', '')} - {TICKER_NAMES.get(ticker, ticker)}")
@@ -349,7 +349,7 @@ def tab3():
         st.dataframe(data, use_container_width=True)
         
         # Hiển thị chú thích
-        st.caption("📝 Đơn vị: Nghìn VNĐ")
+        st.caption("Đơn vị: Nghìn VNĐ")
     else:
         st.warning("Không có dữ liệu tài chính cho cổ phiếu này")
 
@@ -359,15 +359,15 @@ def tab3():
 #==============================================================================
 
 def tab4():
-    st.title("🎲 Mô Phỏng Monte Carlo")
+    st.title("Mô Phỏng Monte Carlo")
     
     if ticker == '-':
-        st.info("👈 Vui lòng chọn một mã cổ phiếu từ menu bên trái")
+        st.info("Vui lòng chọn một mã cổ phiếu từ menu bên trái")
         return
     
     st.subheader(f"{ticker.replace('.VN', '')} - {TICKER_NAMES.get(ticker, ticker)}")
     
-    st.info("💡 Mô phỏng Monte Carlo giúp dự đoán xu hướng giá cổ phiếu trong tương lai dựa trên dữ liệu lịch sử")
+    st.info("Mô phỏng Monte Carlo giúp dự đoán xu hướng giá cổ phiếu trong tương lai dựa trên dữ liệu lịch sử")
     
     # Tùy chọn
     c1, c2 = st.columns(2)
@@ -418,7 +418,7 @@ def tab4():
             st.error(f"Lỗi khi mô phỏng: {str(e)}")
             return pd.DataFrame(), None
     
-    if st.button("🚀 Chạy Mô Phỏng", type="primary"):
+    if st.button("Chạy Mô Phỏng", type="primary"):
         with st.spinner("Đang thực hiện mô phỏng..."):
             mc, current_price = montecarlo(ticker, time_horizon, simulations)
             
@@ -436,7 +436,7 @@ def tab4():
                 st.pyplot(fig)
                 
                 # Phân tích Value at Risk (VaR)
-                st.subheader('📉 Phân Tích Rủi Ro - Value at Risk (VaR)')
+                st.subheader('Phân Tích Rủi Ro - Value at Risk (VaR)')
                 
                 ending_price = mc.iloc[-1, :].values
                 
@@ -464,7 +464,7 @@ def tab4():
                     st.metric("VaR (95% tin cậy)", f"{VaR:,.0f} VNĐ", 
                              delta=f"{(VaR/current_price*100):.2f}%", delta_color="inverse")
                 
-                st.info(f"📊 **Giải thích**: Với độ tin cậy 95%, rủi ro tối đa trong {time_horizon} ngày tới là {VaR:,.0f} VNĐ ({(VaR/current_price*100):.2f}% giá hiện tại)")
+                st.info(f"**Giải thích**: Với độ tin cậy 95%, rủi ro tối đa trong {time_horizon} ngày tới là {VaR:,.0f} VNĐ ({(VaR/current_price*100):.2f}% giá hiện tại)")
             else:
                 st.error("Không thể thực hiện mô phỏng. Vui lòng thử lại.")
 
@@ -474,9 +474,9 @@ def tab4():
 #==============================================================================
 
 def tab5():
-    st.title("📊 So Sánh Danh Mục Đầu Tư")
+    st.title("So Sánh Danh Mục Đầu Tư")
     
-    st.info("💡 Chọn nhiều cổ phiếu để so sánh xu hướng giá")
+    st.info("Chọn nhiều cổ phiếu để so sánh xu hướng giá")
     
     selected_tickers = st.multiselect(
         "Chọn các mã cổ phiếu trong danh mục của bạn",
@@ -526,7 +526,7 @@ def tab5():
         df_normalized = (df / df.iloc[0]) * 100
         
         # Tab cho biểu đồ gốc và chuẩn hóa
-        tab_raw, tab_normalized = st.tabs(["📈 Giá Thực Tế", "📊 So Sánh Chuẩn Hóa (Base 100)"])
+        tab_raw, tab_normalized = st.tabs(["Giá Thực Tế", "So Sánh Chuẩn Hóa (Base 100)"])
         
         with tab_raw:
             fig1 = px.line(df, title=f'Xu hướng giá các cổ phiếu - {period}')
@@ -548,10 +548,10 @@ def tab5():
             )
             st.plotly_chart(fig2, use_container_width=True)
             
-            st.info("📝 **Chú thích**: Biểu đồ chuẩn hóa giúp so sánh hiệu suất tương đối giữa các cổ phiếu, bất kể mức giá ban đầu")
+            st.info("**Chú thích**: Biểu đồ chuẩn hóa giúp so sánh hiệu suất tương đối giữa các cổ phiếu, bất kể mức giá ban đầu")
         
         # Thống kê
-        st.subheader("📊 Thống Kê Danh Mục")
+        st.subheader("Thống Kê Danh Mục")
         
         returns = df.pct_change().dropna()
         
@@ -574,21 +574,21 @@ def tab5():
 #==============================================================================
 
 def tab6():
-    st.title("ℹ️ Giới Thiệu VN30")
+    st.title("Giới Thiệu VN30")
     
     st.markdown("""
-    ### 📋 VN30 là gì?
+    ### VN30 là gì?
     
     **VN30** (Vietnam National Stock Exchange - Top 30) là chỉ số gồm 30 cổ phiếu có vốn hóa lớn nhất và 
     thanh khoản cao nhất trên Sở Giao dịch Chứng khoán TP. Hồ Chí Minh (HOSE).
     
-    ### 🎯 Đặc điểm:
-    - ✅ 30 cổ phiếu blue-chip hàng đầu
-    - ✅ Được review và điều chỉnh định kỳ
-    - ✅ Đại diện cho các ngành then chốt của nền kinh tế
-    - ✅ Thanh khoản cao, phù hợp cho đầu tư dài hạn
+    ### Đặc điểm:
+    - 30 cổ phiếu blue-chip hàng đầu
+    - Được review và điều chỉnh định kỳ
+    - Đại diện cho các ngành then chốt của nền kinh tế
+    - Thanh khoản cao, phù hợp cho đầu tư dài hạn
     
-    ### 📊 Phân bổ theo ngành:
+    ### Phân bổ theo ngành:
     """)
     
     # Phân loại theo ngành
@@ -614,7 +614,7 @@ def tab6():
     st.plotly_chart(fig, use_container_width=True)
     
     # Danh sách chi tiết
-    st.subheader("📝 Danh Sách Đầy Đủ 30 Cổ Phiếu VN30")
+    st.subheader("Danh Sách Đầy Đủ 30 Cổ Phiếu VN30")
     
     vn30_info = []
     for ticker in VN30_TICKERS:
@@ -629,16 +629,16 @@ def tab6():
     
     st.markdown("""
     ---
-    ### 🔍 Cách sử dụng Dashboard:
+    ### Cách sử dụng Dashboard:
     
-    1. **📊 Tổng Quan**: Xem thông tin cơ bản và biểu đồ giá lịch sử
-    2. **📈 Biểu Đồ Kỹ Thuật**: Phân tích kỹ thuật với các công cụ như SMA, biểu đồ nến
-    3. **💰 Thông Tin Tài Chính**: Xem các báo cáo tài chính chi tiết
-    4. **🎲 Mô Phỏng Monte Carlo**: Dự đoán xu hướng giá và đánh giá rủi ro
-    5. **📊 So Sánh Danh Mục**: So sánh hiệu suất của nhiều cổ phiếu
+    1. **Tổng Quan**: Xem thông tin cơ bản và biểu đồ giá lịch sử
+    2. **Biểu Đồ Kỹ Thuật**: Phân tích kỹ thuật với các công cụ như SMA, biểu đồ nến
+    3. **Thông Tin Tài Chính**: Xem các báo cáo tài chính chi tiết
+    4. **Mô Phỏng Monte Carlo**: Dự đoán xu hướng giá và đánh giá rủi ro
+    5. **So Sánh Danh Mục**: So sánh hiệu suất của nhiều cổ phiếu
     
     ---
-    💡 **Lưu ý**: Dữ liệu được cung cấp bởi Yahoo Finance. Dashboard này chỉ mang tính chất tham khảo, 
+    **Lưu ý**: Dữ liệu được cung cấp bởi Yahoo Finance. Dashboard này chỉ mang tính chất tham khảo, 
     không phải lời khuyên đầu tư.
     """)
 
@@ -651,7 +651,7 @@ def run():
     # Cấu hình trang
     st.set_page_config(
         page_title="VN30 Financial Dashboard",
-        page_icon="📊",
+        page_icon="🇻🇳",
         layout="wide",
         initial_sidebar_state="expanded"
     )
@@ -687,32 +687,32 @@ def run():
     # Chọn tab
     select_tab = st.sidebar.radio(
         "Chọn chức năng",
-        ['📊 Tổng Quan', '📈 Biểu Đồ Kỹ Thuật', '💰 Thông Tin Tài Chính', 
-         '🎲 Mô Phỏng Monte Carlo', '📊 So Sánh Danh Mục', 'ℹ️ Giới Thiệu VN30']
+        ['Tổng Quan', 'Biểu Đồ Kỹ Thuật', 'Thông Tin Tài Chính', 
+         'Mô Phỏng Monte Carlo', 'So Sánh Danh Mục', 'Giới Thiệu VN30']
     )
     
     st.sidebar.markdown("---")
     st.sidebar.info("""
-    **📌 Dashboard VN30**
+    **Dashboard VN30**
     
     Công cụ phân tích và theo dõi 
     30 cổ phiếu hàng đầu Việt Nam
     
-    🔗 Dữ liệu: Yahoo Finance
+    Dữ liệu: Yahoo Finance
     """)
     
     # Hiển thị tab được chọn
-    if select_tab == '📊 Tổng Quan':
+    if select_tab == 'Tổng Quan':
         tab1()
-    elif select_tab == '📈 Biểu Đồ Kỹ Thuật':
+    elif select_tab == 'Biểu Đồ Kỹ Thuật':
         tab2()
-    elif select_tab == '💰 Thông Tin Tài Chính':
+    elif select_tab == 'Thông Tin Tài Chính':
         tab3()
-    elif select_tab == '🎲 Mô Phỏng Monte Carlo':
+    elif select_tab == 'Mô Phỏng Monte Carlo':
         tab4()
-    elif select_tab == '📊 So Sánh Danh Mục':
+    elif select_tab == 'So Sánh Danh Mục':
         tab5()
-    elif select_tab == 'ℹ️ Giới Thiệu VN30':
+    elif select_tab == 'Giới Thiệu VN30':
         tab6()
 
 
