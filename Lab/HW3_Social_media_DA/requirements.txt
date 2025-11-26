@@ -1,0 +1,15 @@
+# Thư viện bắt buộc
+networkx>=3.0
+pandas>=1.5.0
+numpy>=1.24.0
+matplotlib>=3.6.0
+seaborn>=0.12.0
+scipy>=1.10.0
+
+# Thư viện tùy chọn (khuyến nghị)
+python-louvain>=0.16
+jupyter>=1.0.0
+notebook>=6.5.0
+
+# Để xuất file cho Gephi (đã có sẵn trong networkx)
+# Không cần cài đặt thêm

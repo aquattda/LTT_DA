@@ -17,15 +17,15 @@ Xây dựng một Financial Dashboard hoàn chỉnh để phân tích và theo d
 ## 📁 CẤU TRÚC DỰ ÁN
 
 ```
-[HW2] Xay dung financial dashboard/
+HW2_Financial_Dashboard/
 │
-├── vn30_dashboard.py          # 🎯 FILE CHÍNH - Dashboard Streamlit cho VN30
+├── vn30_dashboard.py          # FILE CHÍNH - Dashboard Streamlit cho VN30
+├── findash_demo.ipynb         # file demo qúa trình từng bước bởi các test
+├── QUICK_START.md             # Tài liệu chi tiết đầy đủ
+├── QUICK_START.md             # Hướng dẫn nhanh
+├── THIS_PROJECT.md            # File này - Tổng quan dự án
 │
-├── README_VN30.md             # 📖 Tài liệu chi tiết đầy đủ
-├── QUICK_START.md             # 🚀 Hướng dẫn nhanh
-├── THIS_PROJECT.md            # 📋 File này - Tổng quan dự án
-│
-└── requirements.txt           # 📦 Danh sách thư viện cần thiết
+└── requirements.txt           # Danh sách thư viện cần thiết
 ```
 
 ---
@@ -297,147 +297,6 @@ jupyter notebook
 # Chạy các cell theo thứ tự
 ```
 
----
-
-## 🔧 CUSTOMIZATION
-
-### Thêm cổ phiếu mới
-```python
-# Trong file vn30_dashboard.py
-VN30_TICKERS = [
-    'ACB.VN', 'BCM.VN', ...,
-    'YOUR_TICKER.VN'  # Thêm ở đây
-]
-
-TICKER_NAMES = {
-    'YOUR_TICKER.VN': 'Tên công ty',
-    ...
-}
-```
-
-### Thay đổi màu sắc
-```python
-# Trong file vn30_dashboard.py
-fig = px.area(..., color_discrete_sequence=['your_color'])
-```
-
-### Thêm chỉ báo kỹ thuật mới
-```python
-# Ví dụ: Thêm EMA
-data['EMA'] = data['Close'].ewm(span=20).mean()
-
-fig.add_trace(
-    go.Scatter(x=data['Date'], y=data['EMA'], name='EMA 20')
-)
-```
-
----
-
-## 📊 KIẾN TRÚC CODE
-
-### Main Function Flow
-```
-run()
-├── Setup page config
-├── Create sidebar
-│   ├── Ticker selection
-│   └── Tab selection
-└── Display selected tab
-    ├── tab1() - Tổng Quan
-    ├── tab2() - Biểu Đồ KT
-    ├── tab3() - Thông Tin TC
-    ├── tab4() - Monte Carlo
-    ├── tab5() - So Sánh DM
-    └── tab6() - Giới Thiệu
-```
-
-### Data Flow
-```
-User Input → yfinance API → Data Processing → Visualization → Display
-```
-
-### Caching Strategy
-```python
-@st.cache_data
-def getstockdata(ticker):
-    # Cache dữ liệu để tăng tốc độ
-    return yf.download(ticker, ...)
-```
-
----
-
-## ⚡ PERFORMANCE TIPS
-
-### 1. Cache dữ liệu
-```python
-@st.cache_data
-def expensive_function():
-    # Tính toán phức tạp
-    return result
-```
-
-### 2. Giới hạn khoảng thời gian
-```python
-# Không nên
-data = yf.download(ticker, period='max')  # Quá nhiều dữ liệu
-
-# Nên
-data = yf.download(ticker, period='1y')  # Vừa đủ
-```
-
-### 3. Lazy loading
-```python
-# Chỉ load khi cần
-if st.button("Chạy mô phỏng"):
-    result = monte_carlo_simulation()
-```
-
----
-
-## 🐛 TROUBLESHOOTING
-
-### Vấn đề 1: Không tải được dữ liệu
-**Nguyên nhân**: 
-- Không có Internet
-- Mã cổ phiếu sai format
-- Yahoo Finance bị chặn
-
-**Giải quyết**:
-```python
-# Kiểm tra format
-ticker = "VCB.VN"  # ✅ Đúng
-ticker = "VCB"     # ❌ Sai
-
-# Test kết nối
-import yfinance as yf
-data = yf.download("VCB.VN", period="1d")
-print(data)
-```
-
-### Vấn đề 2: Dashboard chậm
-**Nguyên nhân**: Không sử dụng cache
-
-**Giải quyết**:
-```python
-@st.cache_data
-def load_data():
-    return expensive_operation()
-```
-
-### Vấn đề 3: Biểu đồ không hiển thị
-**Nguyên nhân**: Dữ liệu rỗng
-
-**Giải quyết**:
-```python
-if not data.empty:
-    fig = px.line(data)
-    st.plotly_chart(fig)
-else:
-    st.warning("Không có dữ liệu")
-```
-
----
-
 ## 📚 TÀI LIỆU THAM KHẢO
 
 ### Chính thức
@@ -451,53 +310,6 @@ else:
 2. [Financial Analysis with Python](https://www.youtube.com/results?search_query=financial+analysis+python)
 3. [Monte Carlo Simulation](https://www.investopedia.com/terms/m/montecarlosimulation.asp)
 
----
-
-## 🎓 HỌC THÊM
-
-### Concepts cần biết
-- **Technical Analysis**: SMA, EMA, MACD, RSI
-- **Financial Statements**: Income, Balance Sheet, Cash Flow
-- **Risk Management**: VaR, Sharpe Ratio, Beta
-- **Time Series Analysis**: Trends, Seasonality
-
-### Python Libraries
-- **pandas**: Data manipulation
-- **numpy**: Numerical computing
-- **matplotlib/plotly**: Visualization
-- **streamlit**: Web app framework
-
----
-
-## ✅ CHECKLIST HOÀN THÀNH
-
-- [x] Load danh sách VN30
-- [x] Tab Tổng Quan với thông tin cơ bản
-- [x] Tab Biểu Đồ Kỹ Thuật với Candlestick & SMA
-- [x] Tab Thông Tin Tài Chính
-- [x] Tab Mô Phỏng Monte Carlo với VaR
-- [x] Tab So Sánh Danh Mục
-- [x] Tab Giới Thiệu VN30
-- [x] Responsive design
-- [x] Error handling
-- [x] Documentation đầy đủ
-- [x] Demo notebook
-
----
-
-## 🎯 PHÁT TRIỂN TƯƠNG LAI
-
-### Version 2.0 (Future)
-- [ ] Thêm nhiều chỉ báo kỹ thuật (MACD, RSI, Bollinger Bands)
-- [ ] Backtesting strategies
-- [ ] Real-time data updates
-- [ ] Portfolio optimization
-- [ ] Export reports to PDF
-- [ ] Dark mode
-- [ ] Multi-language support
-- [ ] Alert notifications
-
----
 
 ## 👤 THÔNG TIN TÁC GIẢ
 
