@@ -1,15 +1,39 @@
-# Thư viện bắt buộc
+# Requirements for Social Network Analysis Project
+
+# Core libraries
 networkx>=3.0
 pandas>=1.5.0
-numpy>=1.24.0
+numpy>=1.23.0
 matplotlib>=3.6.0
 seaborn>=0.12.0
-scipy>=1.10.0
+scipy>=1.9.0
 
-# Thư viện tùy chọn (khuyến nghị)
+# Community detection algorithms
 python-louvain>=0.16
+scikit-learn>=1.1.0
+
+# Data collection - Facebook API (REQUIRED)
+facebook-sdk>=3.1.0     # Facebook Graph API
+requests>=2.28.0        # HTTP requests
+python-dotenv>=0.21.0   # Environment variables
+
+# Optional - Other social media APIs
+# tweepy>=4.0.0          # Twitter API
+# instaloader>=4.9.0     # Instagram data
+# praw>=7.6.0            # Reddit API
+# beautifulsoup4>=4.11.0 # Web scraping
+# selenium>=4.5.0        # Browser automation
+
+# Jupyter notebook
 jupyter>=1.0.0
 notebook>=6.5.0
+ipykernel>=6.16.0
+ipywidgets>=8.0.0
 
-# Để xuất file cho Gephi (đã có sẵn trong networkx)
-# Không cần cài đặt thêm
+# Export and visualization
+pyvis>=0.3.0           # Interactive network visualization
+plotly>=5.11.0         # Interactive plots
+# gephi-toolkit>=0.9.2 # Gephi integration (optional)
+
+# Utilities
+tqdm>=4.64.0           # Progress bars
