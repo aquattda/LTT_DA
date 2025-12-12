@@ -367,20 +367,34 @@ def correlation_page(walmart_data):
         # Temperature vs Sales
         temp_corr = walmart_data[['Temperature', 'Weekly_Sales']].corr().iloc[0, 1]
         
-        fig = px.scatter(walmart_data.sample(5000), x='Temperature', y='Weekly_Sales',
-                        title=f'Nhiệt Độ vs Doanh Số (Tương quan: {temp_corr:.3f})',
-                        labels={'Temperature': 'Nhiệt Độ (°F)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
-                        trendline="ols", opacity=0.6)
+        try:
+            fig = px.scatter(walmart_data.sample(5000), x='Temperature', y='Weekly_Sales',
+                            title=f'Nhiệt Độ vs Doanh Số (Tương quan: {temp_corr:.3f})',
+                            labels={'Temperature': 'Nhiệt Độ (°F)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
+                            trendline="ols", opacity=0.6)
+        except ImportError:
+            # Fallback without trendline if statsmodels is not available
+            fig = px.scatter(walmart_data.sample(5000), x='Temperature', y='Weekly_Sales',
+                            title=f'Nhiệt Độ vs Doanh Số (Tương quan: {temp_corr:.3f})',
+                            labels={'Temperature': 'Nhiệt Độ (°F)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
+                            opacity=0.6)
         st.plotly_chart(fig, use_container_width=True)
     
     with col2:
         # Unemployment vs Sales
         unemp_corr = walmart_data[['Unemployment', 'Weekly_Sales']].corr().iloc[0, 1]
         
-        fig = px.scatter(walmart_data.sample(5000), x='Unemployment', y='Weekly_Sales',
-                        title=f'Tỷ Lệ Thất Nghiệp vs Doanh Số (Tương quan: {unemp_corr:.3f})',
-                        labels={'Unemployment': 'Tỷ Lệ Thất Nghiệp (%)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
-                        trendline="ols", opacity=0.6)
+        try:
+            fig = px.scatter(walmart_data.sample(5000), x='Unemployment', y='Weekly_Sales',
+                            title=f'Tỷ Lệ Thất Nghiệp vs Doanh Số (Tương quan: {unemp_corr:.3f})',
+                            labels={'Unemployment': 'Tỷ Lệ Thất Nghiệp (%)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
+                            trendline="ols", opacity=0.6)
+        except ImportError:
+            # Fallback without trendline if statsmodels is not available
+            fig = px.scatter(walmart_data.sample(5000), x='Unemployment', y='Weekly_Sales',
+                            title=f'Tỷ Lệ Thất Nghiệp vs Doanh Số (Tương quan: {unemp_corr:.3f})',
+                            labels={'Unemployment': 'Tỷ Lệ Thất Nghiệp (%)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
+                            opacity=0.6)
         st.plotly_chart(fig, use_container_width=True)
     
     # Fuel price analysis
@@ -390,20 +404,34 @@ def correlation_page(walmart_data):
         # Fuel Price vs Sales
         fuel_corr = walmart_data[['Fuel_Price', 'Weekly_Sales']].corr().iloc[0, 1]
         
-        fig = px.scatter(walmart_data.sample(5000), x='Fuel_Price', y='Weekly_Sales',
-                        title=f'Giá Nhiên Liệu vs Doanh Số (Tương quan: {fuel_corr:.3f})',
-                        labels={'Fuel_Price': 'Giá Nhiên Liệu ($/gallon)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
-                        trendline="ols", opacity=0.6)
+        try:
+            fig = px.scatter(walmart_data.sample(5000), x='Fuel_Price', y='Weekly_Sales',
+                            title=f'Giá Nhiên Liệu vs Doanh Số (Tương quan: {fuel_corr:.3f})',
+                            labels={'Fuel_Price': 'Giá Nhiên Liệu ($/gallon)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
+                            trendline="ols", opacity=0.6)
+        except ImportError:
+            # Fallback without trendline if statsmodels is not available
+            fig = px.scatter(walmart_data.sample(5000), x='Fuel_Price', y='Weekly_Sales',
+                            title=f'Giá Nhiên Liệu vs Doanh Số (Tương quan: {fuel_corr:.3f})',
+                            labels={'Fuel_Price': 'Giá Nhiên Liệu ($/gallon)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
+                            opacity=0.6)
         st.plotly_chart(fig, use_container_width=True)
     
     with col2:
         # CPI vs Sales
         cpi_corr = walmart_data[['CPI', 'Weekly_Sales']].corr().iloc[0, 1]
         
-        fig = px.scatter(walmart_data.sample(5000), x='CPI', y='Weekly_Sales',
-                        title=f'CPI vs Doanh Số (Tương quan: {cpi_corr:.3f})',
-                        labels={'CPI': 'Chỉ Số Giá Tiêu Dùng', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
-                        trendline="ols", opacity=0.6)
+        try:
+            fig = px.scatter(walmart_data.sample(5000), x='CPI', y='Weekly_Sales',
+                            title=f'CPI vs Doanh Số (Tương quan: {cpi_corr:.3f})',
+                            labels={'CPI': 'Chỉ Số Giá Tiêu Dùng', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
+                            trendline="ols", opacity=0.6)
+        except ImportError:
+            # Fallback without trendline if statsmodels is not available
+            fig = px.scatter(walmart_data.sample(5000), x='CPI', y='Weekly_Sales',
+                            title=f'CPI vs Doanh Số (Tương quan: {cpi_corr:.3f})',
+                            labels={'CPI': 'Chỉ Số Giá Tiêu Dùng', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
+                            opacity=0.6)
         st.plotly_chart(fig, use_container_width=True)
     
     # Economic factors over time
