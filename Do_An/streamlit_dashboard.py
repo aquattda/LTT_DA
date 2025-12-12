@@ -145,7 +145,7 @@ def train_model(walmart_data):
         
         # Train a simple Random Forest model
         with st.spinner('Đang train mô hình... (có thể mất vài phút)'):
-            model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+            model = RandomForestRegressor(n_estimators=100, max_depth=15, min_samples_split=5, random_state=42, n_jobs=-1)
             model.fit(X_train, y_train)
         
         # Store label encoder for later use
@@ -156,7 +156,7 @@ def train_model(walmart_data):
         train_score = model.score(X_train, y_train)
         test_score = model.score(X_test, y_test)
         
-        st.success(f"✅ Mô hình đã được train! Train R²: {train_score:.3f}, Test R²: {test_score:.3f}")
+        st.success(f"Mô hình đã được train! Train R²: {train_score:.3f}, Test R²: {test_score:.3f}")
         
         return model
         
@@ -229,7 +229,7 @@ def overview_page(walmart_data):
                      labels={'mean': 'Average Sales ($)', 'Type': 'Store Type'},
                      color='Type', color_discrete_sequence=px.colors.qualitative.Set1)
         fig.update_layout(showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Store distribution
@@ -237,7 +237,7 @@ def overview_page(walmart_data):
         fig = px.pie(values=store_counts.values, names=store_counts.index,
                      title='Phân Phối Loại Cửa Hàng',
                      color_discrete_sequence=px.colors.qualitative.Set1)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Top performing departments
     st.markdown('<h3 class="sub-header">Top 10 Bộ Phận Theo Doanh Số</h3>', unsafe_allow_html=True)
@@ -246,7 +246,7 @@ def overview_page(walmart_data):
                  title='Top 10 Bộ Phận Theo Doanh Số Trung Bình Hàng Tuần',
                  labels={'x': 'Bộ Phận', 'y': 'Doanh Số Trung Bình ($)'},
                  color=dept_sales.values, color_continuous_scale='Blues')
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Insights
     st.markdown("### Những Phát Hiện Quan Trọng:")
@@ -293,7 +293,7 @@ def eda_page(walmart_data):
                         title='Kích Cỡ Cửa Hàng vs Doanh Số Trung Bình Hàng Tuần',
                         labels={'Size': 'Kích Cỡ Cửa Hàng (feet vuông)', 'Weekly_Sales': 'Doanh Số TB Hàng Tuần ($)'},
                         hover_data=['Store'])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Sales distribution
@@ -304,7 +304,7 @@ def eda_page(walmart_data):
         fig.add_vline(x=filtered_data['Weekly_Sales'].mean(), 
                       annotation_text=f"Trung bình: ${filtered_data['Weekly_Sales'].mean():,.0f}",
                       line_dash="dash", line_color="red")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Department analysis
     st.markdown('<h3 class="sub-header">Phân Tích Bộ Phận</h3>', unsafe_allow_html=True)
@@ -313,7 +313,7 @@ def eda_page(walmart_data):
     fig = px.box(filtered_data, x='Type', y='Weekly_Sales',
                  title='Phân Phối Doanh Số Theo Loại Cửa Hàng',
                  labels={'Weekly_Sales': 'Doanh Số Hàng Tuần ($)', 'Type': 'Loại Cửa Hàng'})
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Correlation heatmap
     st.markdown('<h3 class="sub-header">Bản Đồ Nhiệt Tương Quan</h3>', unsafe_allow_html=True)
@@ -323,7 +323,7 @@ def eda_page(walmart_data):
     fig = px.imshow(corr_data, text_auto=True, aspect="auto",
                     title='Ma Trận Tương Quan Các Biến Số Chính',
                     color_continuous_scale='RdBu_r')
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 def time_analysis_page(walmart_data):
     st.markdown('<h2 class="sub-header">Phân Tích Dãy Thời Gian</h2>', unsafe_allow_html=True)
@@ -358,7 +358,7 @@ def time_analysis_page(walmart_data):
             textangle=-45
         )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Weekly patterns
     col1, col2 = st.columns(2)
@@ -372,7 +372,7 @@ def time_analysis_page(walmart_data):
                      title='Doanh Số Trung Bình Theo Quý',
                      labels={'Weekly_Sales': 'Doanh Số Trung Bình ($)', 'Period': 'Quý'},
                      color='Weekly_Sales', color_continuous_scale='Blues')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Seasonal analysis
@@ -388,7 +388,7 @@ def time_analysis_page(walmart_data):
                      title='Doanh Số Trung Bình Theo Mùa',
                      labels={'x': 'Mùa', 'y': 'Doanh Số Trung Bình ($)'},
                      color=seasonal_sales.values, color_continuous_scale='Viridis')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Year-over-year comparison
     st.markdown('<h3 class="sub-header">So Sánh Theo Năm</h3>', unsafe_allow_html=True)
@@ -398,7 +398,7 @@ def time_analysis_page(walmart_data):
                  title='Doanh Số Trung Bình Theo Năm và Loại Cửa Hàng',
                  labels={'Weekly_Sales': 'Doanh Số Trung Bình ($)', 'Year': 'Năm'},
                  barmode='group')
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 def correlation_page(walmart_data):
     st.markdown('<h2 class="sub-header">Phân Tích Tương Quan</h2>', unsafe_allow_html=True)
@@ -421,7 +421,7 @@ def correlation_page(walmart_data):
                             title=f'Nhiệt Độ vs Doanh Số (Tương quan: {temp_corr:.3f})',
                             labels={'Temperature': 'Nhiệt Độ (°F)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
                             opacity=0.6)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Unemployment vs Sales
@@ -438,7 +438,7 @@ def correlation_page(walmart_data):
                             title=f'Tỷ Lệ Thất Nghiệp vs Doanh Số (Tương quan: {unemp_corr:.3f})',
                             labels={'Unemployment': 'Tỷ Lệ Thất Nghiệp (%)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
                             opacity=0.6)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Fuel price analysis
     col1, col2 = st.columns(2)
@@ -458,7 +458,7 @@ def correlation_page(walmart_data):
                             title=f'Giá Nhiên Liệu vs Doanh Số (Tương quan: {fuel_corr:.3f})',
                             labels={'Fuel_Price': 'Giá Nhiên Liệu ($/gallon)', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
                             opacity=0.6)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # CPI vs Sales
@@ -475,7 +475,7 @@ def correlation_page(walmart_data):
                             title=f'CPI vs Doanh Số (Tương quan: {cpi_corr:.3f})',
                             labels={'CPI': 'Chỉ Số Giá Tiêu Dùng', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'},
                             opacity=0.6)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Economic factors over time
     st.markdown('<h3 class="sub-header">Các Yếu Tố Kinh Tế Theo Thời Gian</h3>', unsafe_allow_html=True)
@@ -519,7 +519,7 @@ def correlation_page(walmart_data):
         )
     
     fig.update_layout(height=600, showlegend=False, title_text="Các Yếu Tố Kinh Tế vs Doanh Số Theo Thời Gian")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 def holiday_analysis_page(walmart_data):
     st.markdown('<h2 class="sub-header">Phân Tích Ngày Lễ</h2>', unsafe_allow_html=True)
@@ -548,7 +548,7 @@ def holiday_analysis_page(walmart_data):
                      title='Phân Phối Doanh Số: Ngày Lễ vs Ngày Thường',
                      labels={'IsHoliday': 'Tuần Ngày Lễ', 'Weekly_Sales': 'Doanh Số Hàng Tuần ($)'})
         fig.update_xaxes(tickvals=[False, True], ticktext=['Ngày Thường', 'Ngày Lễ'])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Holiday sales by store type
@@ -557,7 +557,7 @@ def holiday_analysis_page(walmart_data):
                      title='Doanh Số Ngày Lễ Theo Loại Cửa Hàng',
                      labels={'Weekly_Sales': 'Doanh Số Trung Bình ($)', 'Type': 'Loại Cửa Hàng'},
                      barmode='group')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # End of year analysis
     st.markdown('<h3 class="sub-header">Phân Tích Cuối Năm</h3>', unsafe_allow_html=True)
@@ -581,7 +581,7 @@ def holiday_analysis_page(walmart_data):
     fig.add_vline(x=47, line_dash="dash", annotation_text="Lễ Tạ Ơn")
     fig.add_vline(x=51, line_dash="dash", annotation_text="Giáng Sinh")
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Holiday insights
     st.markdown("### Những Hiểu Biết Về Ngày Lễ:")
@@ -720,7 +720,7 @@ def prediction_page(walmart_data, test_data):
                         title='Top 10 Mức Độ Quan Trọng Của Đặc Trưng',
                         labels={'importance': 'Mức Độ Quan Trọng', 'feature': 'Đặc Trưng'},
                         orientation='h')
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
 def store_performance_page(walmart_data):
     st.markdown('<h2 class="sub-header">Phân Tích Hiệu Suất Cửa Hàng</h2>', unsafe_allow_html=True)
@@ -744,7 +744,7 @@ def store_performance_page(walmart_data):
         fig = px.bar(top_stores, x='Store', y='Total_Sales', color='Type',
                      title='Top 10 Cửa Hàng Theo Tổng Doanh Số',
                      labels={'Total_Sales': 'Tổng Doanh Số ($)', 'Store': 'ID Cửa Hàng'})
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Sales per square foot
@@ -754,7 +754,7 @@ def store_performance_page(walmart_data):
                         labels={'Size': 'Kích Cỡ Cửa Hàng (feet vuông)', 
                                'Sales_per_sqft': 'Doanh Số/1000 feet vuông ($)'},
                         hover_data=['Store'])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     # Store comparison table
     st.markdown("### Bảng Hiệu Suất Cửa Hàng")
@@ -769,7 +769,7 @@ def store_performance_page(walmart_data):
     # Display table
     st.dataframe(
         filtered_stores.sort_values('Total_Sales', ascending=False),
-        use_container_width=True,
+        width='stretch',
         column_config={
             "Store": "ID Cửa Hàng",
             "Total_Sales": st.column_config.NumberColumn("Tổng Doanh Số", format="$%.0f"),
@@ -798,15 +798,14 @@ def store_performance_page(walmart_data):
         fig = px.bar(top_depts, x='Dept', y='Total_Sales',
                      title=f'Top Bộ Phận Cửa Hàng {selected_store}',
                      labels={'Total_Sales': 'Tổng Doanh Số ($)', 'Dept': 'Bộ Phận'})
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     
     with col2:
         # Average sales by department
         fig = px.bar(top_depts, x='Dept', y='Avg_Sales',
                      title=f'Doanh Số Trung Bình Hàng Tuần Theo Bộ Phận - Cửa Hàng {selected_store}',
                      labels={'Avg_Sales': 'Doanh Số TB Hàng Tuần ($)', 'Dept': 'Bộ Phận'})
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
 if __name__ == "__main__":
-
     main()
