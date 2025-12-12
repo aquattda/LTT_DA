@@ -8,6 +8,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import joblib
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import warnings
 import os
@@ -112,13 +115,53 @@ def load_data():
         return None, None
 
 @st.cache_resource
-def load_model():
-    """Load the trained model"""
+@st.cache_resource
+def train_model(walmart_data):
+    """Train a simple Random Forest model for prediction"""
     try:
-        model = joblib.load('rf_walmart_model.pkl')
+        # Prepare features for training
+        df = walmart_data.copy()
+        
+        # Select features for training
+        features = ['Store', 'Dept', 'Size', 'Type', 'Temperature', 'Fuel_Price', 
+                   'CPI', 'Unemployment', 'IsHoliday', 'Year', 'Month', 'Week']
+        
+        # Encode categorical variables
+        le_type = LabelEncoder()
+        df['Type_encoded'] = le_type.fit_transform(df['Type'])
+        df['IsHoliday_encoded'] = df['IsHoliday'].astype(int)
+        
+        # Updated feature list
+        model_features = ['Store', 'Dept', 'Size', 'Type_encoded', 'Temperature', 
+                         'Fuel_Price', 'CPI', 'Unemployment', 'IsHoliday_encoded', 
+                         'Year', 'Month', 'Week']
+        
+        # Prepare data
+        X = df[model_features].dropna()
+        y = df.loc[X.index, 'Weekly_Sales']
+        
+        # Simple train-test split for demonstration
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        # Train a simple Random Forest model
+        with st.spinner('Đang train mô hình... (có thể mất vài phút)'):
+            model = RandomForestRegressor(n_estimators=50, max_depth=10, random_state=42, n_jobs=-1)
+            model.fit(X_train, y_train)
+        
+        # Store label encoder for later use
+        model.label_encoder = le_type
+        model.feature_names = model_features
+        
+        # Quick evaluation
+        train_score = model.score(X_train, y_train)
+        test_score = model.score(X_test, y_test)
+        
+        st.success(f"✅ Mô hình đã được train! Train R²: {train_score:.3f}, Test R²: {test_score:.3f}")
+        
         return model
-    except:
-        st.warning("Không tìm thấy file mô hình. Chức năng dự đoán sẽ bị vô hiệu hóa.")
+        
+    except Exception as e:
+        st.error(f"Lỗi khi train mô hình: {e}")
         return None
 
 def main():
@@ -556,10 +599,11 @@ def holiday_analysis_page(walmart_data):
 def prediction_page(walmart_data, test_data):
     st.markdown('<h2 class="sub-header">Dự Đoán Doanh Số</h2>', unsafe_allow_html=True)
     
-    model = load_model()
+    # Train model if not already cached
+    model = train_model(walmart_data)
     
     if model is None:
-        st.error("Mô hình không khả dụng. Vui lòng đảm bảo file 'rf_walmart_model.pkl' tồn tại.")
+        st.error("Không thể train mô hình. Vui lòng kiểm tra dữ liệu.")
         return
     
     # Prediction interface
@@ -589,46 +633,34 @@ def prediction_page(walmart_data, test_data):
         month = 12
     quarter = ((month - 1) // 3) + 1
     
-    # Prepare prediction data with exact column names from trained model
+    # Get store info from data
+    store_info = walmart_data[walmart_data['Store'] == store].iloc[0]
+    
+    # Prepare prediction data with exact column names from trained model  
     pred_data = pd.DataFrame({
         'Store': [store],
         'Dept': [dept],
-        'IsHoliday': [1 if is_holiday else 0],
         'Size': [size],
+        'Type_encoded': [model.label_encoder.transform([store_type])[0]],
         'Temperature': [walmart_data['Temperature'].mean()],  # Use average
+        'Fuel_Price': [walmart_data['Fuel_Price'].mean()],
+        'CPI': [walmart_data['CPI'].mean()],
+        'Unemployment': [walmart_data['Unemployment'].mean()],
+        'IsHoliday_encoded': [1 if is_holiday else 0],
         'Year': [year],
         'Month': [month],
-        'Week': [week],
-        'Quarter': [quarter],
-        'Types': [1 if store_type == 'A' else 2 if store_type == 'B' else 3],
-        'Fuel_Price_mean': [walmart_data['Fuel_Price'].mean()],
-        'CPI_mean': [walmart_data['CPI'].mean()],
-        'Tem_mean': [walmart_data['Temperature'].mean()],
-        'Unem_mean': [walmart_data['Unemployment'].mean()]
+        'Week': [week]
     })
     
     if st.button("Dự Đoán Doanh Số", type="primary"):
         try:
-            # Debug: Show model feature names if available
-            # if hasattr(model, 'feature_names_in_'):
-            #     st.write("Model feature names:", model.feature_names_in_)
-            #     st.write("Prediction data columns:", pred_data.columns.tolist())
-                
-            # Try to match column names exactly
-            if hasattr(model, 'feature_names_in_'):
-                expected_features = model.feature_names_in_
-                current_features = pred_data.columns.tolist()
-                
-                # Check for missing features
-                missing_features = [f for f in expected_features if f not in current_features]
-                if missing_features:
-                    st.error(f"Missing features: {missing_features}")
-                    return
-                
-                # Reorder columns to match expected order
-                pred_data = pred_data[expected_features]
+            # Use the feature order from training
+            expected_features = model.feature_names
             
-            prediction = model.predict(pred_data)[0]
+            # Ensure prediction data has same order as training
+            pred_data_ordered = pred_data[expected_features]
+            
+            prediction = model.predict(pred_data_ordered)[0]
             
             st.success(f"### Dự Đoán Doanh Số Hàng Tuần: ${prediction:,.2f}")
             
