@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import joblib
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import warnings
+import os
 warnings.filterwarnings('ignore')
 
 # Page configuration
@@ -56,11 +57,15 @@ st.markdown("""
 def load_data():
     """Load and prepare data"""
     try:
-        # Load datasets
-        train_df = pd.read_csv("dataset/train.csv")
-        stores_df = pd.read_csv("dataset/stores.csv")
-        features_df = pd.read_csv("dataset/features.csv")
-        test_df = pd.read_csv("dataset/test.csv")
+        # Get the directory of the current script
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        dataset_dir = os.path.join(current_dir, "dataset")
+        
+        # Load datasets with proper path handling
+        train_df = pd.read_csv(os.path.join(dataset_dir, "train.csv"))
+        stores_df = pd.read_csv(os.path.join(dataset_dir, "stores.csv"))
+        features_df = pd.read_csv(os.path.join(dataset_dir, "features.csv"))
+        test_df = pd.read_csv(os.path.join(dataset_dir, "test.csv"))
         
         # Merge data for training set
         train_stores = pd.merge(train_df, stores_df, on='Store', how='left')
@@ -91,6 +96,19 @@ def load_data():
     
     except Exception as e:
         st.error(f"Error loading data: {e}")
+        st.error(f"Current working directory: {os.getcwd()}")
+        st.error(f"Script directory: {os.path.dirname(os.path.abspath(__file__))}")
+        st.error(f"Looking for dataset in: {os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dataset')}")
+        
+        # List available files
+        try:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            st.error(f"Files in script directory: {os.listdir(current_dir)}")
+            if os.path.exists(os.path.join(current_dir, 'dataset')):
+                st.error(f"Files in dataset directory: {os.listdir(os.path.join(current_dir, 'dataset'))}")
+        except:
+            pass
+            
         return None, None
 
 @st.cache_resource
