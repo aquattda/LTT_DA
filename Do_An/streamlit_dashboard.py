@@ -145,7 +145,7 @@ def train_model(walmart_data):
         
         # Train a simple Random Forest model
         with st.spinner('Đang train mô hình... (có thể mất vài phút)'):
-            model = RandomForestRegressor(n_estimators=50, max_depth=10, random_state=42, n_jobs=-1)
+            model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
             model.fit(X_train, y_train)
         
         # Store label encoder for later use
@@ -808,4 +808,5 @@ def store_performance_page(walmart_data):
         st.plotly_chart(fig, use_container_width=True)
 
 if __name__ == "__main__":
+
     main()
