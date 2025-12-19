@@ -8,7 +8,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import joblib
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
@@ -145,9 +145,9 @@ def train_model(walmart_data):
         # Simple train-test split for demonstration
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        # Train a simple Random Forest model
-        with st.spinner('Đang train mô hình... (có thể mất vài phút)'):
-            model = RandomForestRegressor(n_estimators=100, max_depth=15, min_samples_split=5, random_state=42, n_jobs=-1)
+        # Train Gradient Boosting model với siêu tham số tối ưu
+        with st.spinner('Đang train mô hình Gradient Boosting... (có thể mất vài phút)'):
+            model = GradientBoostingRegressor(n_estimators=100, max_depth=15, learning_rate=0.1, random_state=42)
             model.fit(X_train, y_train)
         
         # Store label encoder for later use
