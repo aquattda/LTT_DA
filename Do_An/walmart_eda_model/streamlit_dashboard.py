@@ -62,7 +62,9 @@ def load_data():
     try:
         # Get the directory of the current script
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        dataset_dir = os.path.join(current_dir, "dataset")
+        # Dataset is in the parent directory's dataset folder
+        parent_dir = os.path.dirname(current_dir)
+        dataset_dir = os.path.join(parent_dir, "dataset")
         
         # Load datasets with proper path handling
         train_df = pd.read_csv(os.path.join(dataset_dir, "train.csv"))
