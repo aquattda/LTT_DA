@@ -22,3 +22,8 @@
 - PNG result figures are stored under `Do_An/walmart_eda_model/`; they represent saved results, not a newly verified training run.
 
 _Last updated: 2026-09-17_
+
+## README Visual Assets
+- `assets/readme/walmart-hero.png`: generated decorative hero artwork; not a data chart.
+- `assets/readme/project-stats.svg`, `tech-stack.svg`, `workflow.svg`: local static vector graphics for verified project metrics, stack, and workflow.
+- README uses GitHub-compatible Markdown, HTML tables, and collapsible details; no external badge/image services.
