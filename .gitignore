@@ -1,5 +1,7 @@
 # Python virtual environment
 myvenv/
+.venv/
+artifacts/
 venv/
 env/
 ENV/

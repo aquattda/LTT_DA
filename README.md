@@ -1,4 +1,4 @@
-﻿<a id="top"></a>
+<a id="top"></a>
 
 <p align="center">
   <img src="assets/readme/walmart-hero.png" alt="Walmart Sales Analytics — Explore patterns. Predict possibilities." width="100%" />
@@ -125,7 +125,7 @@ Notebook so sánh mô hình bằng **MAE · MSE · RMSE · R² · WMAE** và ch�
 
 Notebook có bước lưu mô hình bằng `joblib`. Liên kết tải mô hình nằm trong [`Do_An/readme.md`](Do_An/readme.md); các tệp `.pkl` được loại khỏi Git.
 
-Dashboard sử dụng **Gradient Boosting**, tự huấn luyện khi mở trang **Dự Đoán** và lưu mô hình trong bộ nhớ đệm Streamlit. Không cần tải tệp `.pkl` để chạy dashboard; lần huấn luyện đầu có thể mất vài phút tùy máy.
+Dashboard sử dụng **Gradient Boosting**, chỉ huấn luyện khi bấm **Tạo dự đoán** và lưu mô hình trong bộ nhớ đệm Streamlit. Không cần tải tệp `.pkl` để chạy dashboard; lần huấn luyện đầu có thể mất vài phút tùy máy. Kết quả luôn ghi rõ kịch bản đã gửi, kể cả khi bạn tiếp tục chỉnh biểu mẫu.
 
 </details>
 
@@ -152,53 +152,61 @@ Dashboard sử dụng **Gradient Boosting**, tự huấn luyện khi mở trang 
 
 Có **Python** và **pip**, mở terminal tại thư mục gốc `LTT_DA/`.
 
-### 01 / Chuẩn bị môi trường
+### 01 / Cấu hình môi trường dự án
 
-```bash
-python -m venv myvenv
-```
-
-<details open>
-<summary><strong>Windows · PowerShell</strong></summary>
+Từ thư mục gốc, chạy bằng Python 3.12:
 
 ```powershell
-.\myvenv\Scripts\Activate.ps1
+python run_project.py setup
 ```
 
-</details>
+Lệnh tạo `.venv/`, cài thư viện dashboard và Jupyter, đăng ký kernel **Python (Walmart)** trong môi trường này rồi kiểm tra import và một lượt fit/predict nhỏ. Không cần kích hoạt PowerShell; môi trường `myvenv` cũ không được sử dụng.
 
-<details>
-<summary><strong>macOS / Linux</strong></summary>
+### 02 / Mở dashboard
 
-```bash
-source myvenv/bin/activate
+```powershell
+python run_project.py dashboard
 ```
 
-</details>
+Mở **Local URL** trong terminal. Bộ lọc **loại cửa hàng / năm / tháng** nằm dưới tiêu đề; không còn bộ lọc khoảng ngày. Chỉnh bộ lọc không đưa trang về đầu; chỉ đổi mục phân tích mới cuộn lên đầu. Các lựa chọn được giữ khi chuyển trang.
 
-### 02 / Cài thư viện & mở dashboard
+Trang **Dự đoán doanh số** tự huấn luyện Gradient Boosting khi bấm **Tạo dự đoán**, không cần chạy notebook trước. Lần huấn luyện đầu có thể mất vài phút.
 
-```bash
-python -m pip install -r Do_An/walmart_eda_model/requirements.txt
-python -m streamlit run Do_An/walmart_eda_model/streamlit_dashboard.py
+### 03 / Mở hoặc chạy notebook
+
+Notebook thực tế của project là **`3122410447_LTT.ipynb`**:
+
+```powershell
+python run_project.py notebook
 ```
 
-Mở **Local URL** trong terminal và chọn một trong **7 trang** ở thanh điều hướng bên trái.
+Mở URL Jupyter có token mà terminal hiển thị, chọn kernel **Python (Walmart)** và chạy các ô theo thứ tự. Notebook tự tìm dữ liệu từ project root; không còn phụ thuộc đường dẫn `../dataset/` của working directory.
 
-<details>
-<summary><strong>↗ &nbsp; Chạy notebook phân tích bằng JupyterLab</strong></summary>
+Để chạy toàn bộ notebook bằng dòng lệnh và lưu kết quả mới riêng:
 
-Từ thư mục gốc dự án, trong môi trường đã cài các thư viện ở trên:
-
-```bash
-python -m pip install jupyterlab
-cd Do_An/walmart_eda_model
-python -m jupyterlab 3122410447_LTT.ipynb
+```powershell
+python run_project.py execute
 ```
 
-Chọn kernel của môi trường vừa cài và chạy các ô theo thứ tự. Giữ thư mục làm việc tại `Do_An/walmart_eda_model/` để đường dẫn `../dataset/` hoạt động đúng. Các bước huấn luyện có thể cần nhiều thời gian tùy cấu hình máy.
+Mỗi lượt chạy tạo thư mục `artifacts/notebook/<thời-gian>/`, gồm notebook có output, biểu đồ và model nếu huấn luyện thành công. File nguồn và các ảnh kết quả cũ không bị ghi đè. Chạy thủ công trong Jupyter ghi artifact vào `artifacts/notebook/manual/`.
 
-</details>
+Nếu không tạo được dự đoán hoặc kernel báo lỗi:
+
+```powershell
+python run_project.py doctor
+```
+
+Nếu log ghi **Application Control policy has blocked this file**, Windows đang chặn thư viện Python/SciPy/scikit-learn. Cần quản trị thiết bị cho phép thư viện chính thức theo chính sách của máy; chạy lại notebook không khắc phục việc hệ điều hành từ chối tải DLL. Các script của project không sửa chính sách bảo mật.
+
+### Kiểm tra ứng dụng
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+node --test tests/test_navigation.cjs
+```
+
+Test UI dùng CSV thật và estimator giả lập cho biểu mẫu dự đoán; test JavaScript dùng DOM giả lập. Chúng không thay thế huấn luyện model thật hoặc kiểm tra cuộn trang bằng trình duyệt.
+
 
 <br />
 
@@ -209,6 +217,8 @@ Chọn kernel của môi trường vừa cài và chạy các ô theo thứ tự
 ```text
 LTT_DA/
 ├── README.md
+├── .streamlit/config.toml          # Theme ứng dụng và sidebar
+├── tests/test_dashboard.py         # Kiểm tra UI và số liệu tổng hợp
 ├── assets/readme/                  # Bộ nhận diện cho README
 └── Do_An/
     ├── readme.md                   # Liên kết tải mô hình
@@ -216,6 +226,10 @@ LTT_DA/
     └── walmart_eda_model/
         ├── 3122410447_LTT.ipynb    # Phân tích & huấn luyện
         ├── streamlit_dashboard.py # Dashboard tương tác
+        ├── dashboard_ui.py        # Thành phần giao diện và theme Plotly
+        ├── dashboard.css          # Bố cục, màu sắc, responsive
+        ├── navigation.js          # Đưa nội dung về đầu khi đổi trang
+        ├── Walmart-Logo-New.png    # Logo Walmart
         ├── requirements.txt       # Thư viện Python
         ├── all_metrics_comparison.png
         ├── actual_vs_predicted.png
